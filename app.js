@@ -1,4 +1,5 @@
 import express from 'express';
+import express_session from 'express-session';
 import GitHubStrategy from 'passport-github';
 import passport from 'passport';
 import dotenv from 'dotenv';
@@ -11,7 +12,7 @@ const app = express();
 app.set('port', 5000);
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => console.log('db connect'))
   .catch((err) => console.error(err));
 
@@ -26,19 +27,40 @@ passport.use(
       callbackURL: 'http://localhost:5000/github/callback',
     },
     async function (accessToken, refreshToken, profile, cb) {
-      console.log(`accessToken = ${accessToken}`);
-      console.log(`refreshToken = ${refreshToken}`);
-      console.log(`profile = ${profile}`);
+      // console.log(`accessToken = ${accessToken}`);
+      // console.log(`refreshToken = ${refreshToken}`);
+      // console.log(`profile = ${profile.username}`);
+      console.log(profile);
+      const {
+        _json: { id, email },
+      } = profile;
 
-      await User.create({ githubId: profile.id }, function (err, user) {
-        return cb(err, user);
-      });
+      try {
+        const user = await User.findOne({ email });
+        if (user) {
+          user.githubId = id;
+          user.save();
+          return cb(null, user);
+        } else {
+          const user2 = await User.create({
+            githubId: profile.id,
+          });
+          // console.log(user2);
+          return cb(null, user2);
+        }
+      } catch (error) {
+        return cb(error);
+      }
+      // await User.create({ githubId: profile.id }, function (err, user) {
+      //   return cb(err, user);
+      // });
     }
   )
 );
-
+// controller
 app.get('/auth/github', passport.authenticate('github'));
 
+// 라우터자리
 app.get(
   '/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),

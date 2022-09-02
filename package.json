@@ -7,6 +7,7 @@
   "dependencies": {
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "mysql2": "^2.3.3",
     "passport": "^0.6.0",
     "passport-github": "^1.1.0",
@@ -16,7 +17,8 @@
     "utils-merge": "^1.0.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./app.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,7 @@
   },
   "homepage": "https://github.com/taesikyoon/prec-passport#readme",
   "devDependencies": {
+    "nodemon": "^2.0.19",
     "sequelize-cli": "^6.4.1"
   }
 }
