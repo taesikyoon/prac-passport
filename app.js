@@ -2,8 +2,22 @@ import passport from 'passport';
 import passportConfig from './passport.js';
 import authRouter from './routes/auth.js';
 import express from 'express';
+import { sequelize } from './models/index.js';
+import dotenv from 'dotenv';
 const app = express();
+
+dotenv.config();
 passportConfig(); // 패스포트 설정
+
+app.set('port', 5000);
+
+sequelize
+  .sync({ force: false })
+  .then(() => console.log('db connect'))
+  .catch((err) => console.error(err));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
@@ -24,3 +38,5 @@ app.use(passport.session()); // req.session 객체에 passport정보를 추가 �
 
 //* 라우터
 app.use('/auth', authRouter);
+
+app.listen(app.get('port'), () => console.log(app.get('port')));
