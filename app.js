@@ -1,9 +1,11 @@
 import passport from 'passport';
-import passportConfig from './passport.js';
+import passportConfig from './passport/index.js';
 import authRouter from './routes/auth.js';
 import express from 'express';
 import { sequelize } from './models/index.js';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
 const app = express();
 
 dotenv.config();
@@ -12,7 +14,7 @@ passportConfig(); // 패스포트 설정
 app.set('port', 5000);
 
 sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => console.log('db connect'))
   .catch((err) => console.error(err));
 
