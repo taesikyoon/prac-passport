@@ -10,7 +10,7 @@ export default () => {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL: process.env.CALLBACK_URL,
-        scope:"user:email"
+        scope: 'user:email',
         //* req.body 객체인자 하고 키값이 일치해야 한다.
         usernameField: 'email', // req.body.email
         passwordField: 'password', // req.body.password
@@ -22,10 +22,12 @@ export default () => {
             */
       },
       //* 콜백함수의  email과 password는 위에서 설정한 필드이다. 위에서 객체가 전송되면 콜백이 실행된다.
-      async (email, password, done) => {
+      async (accessToken, refreshToken, profile, done) => {
         try {
           // 가입된 회원인지 아닌지 확인
-          const exUser = await User.findOne({ where: { email } });
+          const exUser = await User.findOne({
+            where: { githubId: profile.id },
+          });
           // 만일 가입된 회원이면
           if (exUser) {
             // 해시비번을 비교

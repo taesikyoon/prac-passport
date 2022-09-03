@@ -10,6 +10,14 @@ export default class User extends Sequelize.Model {
           type: Sequelize.STRING(255),
           allowNull: true,
         },
+        email: {
+          type: sequelize.STRING(255),
+          allowNull: true,
+        },
+        userName: {
+          type: sequelize.STRING(255),
+          allowNull: true,
+        },
       },
       {
         sequelize,
