@@ -1,5 +1,5 @@
 import passport from 'passport';
-import passportConfig from './passport.js';
+import passportConfig from './passport/index.js';
 import authRouter from './routes/auth.js';
 import express from 'express';
 import { sequelize } from './models/index.js';

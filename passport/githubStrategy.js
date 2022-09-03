@@ -1,5 +1,5 @@
 import passport from 'passport';
-import GitHubStrategy from 'passport-github';
+import GitHubStrategy from 'passport-github2';
 import User from '../models/user.js';
 
 export default () => {
