@@ -9,7 +9,7 @@ const router = express.Router();
 
 //* 로그인 요청
 // 사용자 미들웨어 isNotLoggedIn 통과해야 async (req, res, next) => 미들웨어 실행
-router.get('/auth/github', passport.authenticate('github'));
+router.get('/auth/github', passport.authenticate('github', { session: false }));
 
 router.get(
   '/callback',
@@ -17,9 +17,13 @@ router.get(
   (req, res) => {
     const token = req.user.token;
     console.log(token);
-    res.json({ token, success: true });
+    res.cookie('token', token);
+    res.redirect('/');
   }
 );
+router.get('/', (req, res, next) => {
+  res.send('hi');
+});
 
 /* **************************************************************************************** */
 
